@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>holder-ipsum.js | documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/prettify.css">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href=".">holder-ipsum.js</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href=".">Home</a></li>
+              <li><a href="demo.html">Demo</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="page-header">
+        <h1>
+          holder-ipsum.js
+          <small>
+            Fill your pages with <em>lorem-ipsum</em> without copy-and-pasting
+            or writing any Javascript.
+          </small>
+        </h1>
+      </div>
+      <section id="why">
+      
+        <h2>
+          I've got plenty of <em>lorem-ipsum</em>
+          <small>what are the benefits of <em>holder-ipsum.js</em>?</small>
+        </h2>
+        <dl>
+          <dt>Doesn't require copying and pasting from generator sites</dt>
+          <dd>
+            Every time you need some <em>lorem-ipsum</em>, you don't need to
+            switch to another tab or application to make you the right amount of
+            text; <em>holder-ipsum.js</em> builds the words in the browser as soon
+            as the page loads.
+          </dd>
+          <dt>Easy-to-update</dt>
+          <dd>
+            Changed your mind about how much filler text, you want? With a
+            couple of key strokes you can see the changes in your page in seconds.
+          </dd>
+          <dd>
+            Switching between a number or words, sentences, or paragraphs is just
+            as easy.
+          </dd>
+          <dt>It's flexible</dt>
+          <dd>
+            If you need to see what a list is going to look like, you can
+            rapidly generate child elements such as <code>&lt;li&gt;</code>.
+          </dd>
+          <dd>
+            Control over children follows the same <a href="#syntax">syntax</a>
+            as the parent.
+          </dd>
+          <dt>Don't like altering your markup to get some <em>lorem-ipsum</em>?</dt>
+          <dd>
+            No problem! <em>holder-ipsum.js</em> exposes the entire interface as
+            a <a href="#api">public API</a> so that you can exercise full control
+            from Javascript code if you choose.
+          </dd>
+        </dl>
+      </section>
+      <section id="getting-started">
+        <h2>Getting started</h2>
+        <ol>
+          <li>
+            Include <code>holder-ipsum.js</code> just before the closing
+            <code>&lt;/body&gt;</code> tag.
+          </li>
+          <li>
+            <a href="#syntax">Mark-up</a> the all the elements you want to be
+            filled with <em>lorem-ipsum</em>.
+          </li>
+          <li>Reload the page and see the results.</li>
+        </ol>
+      </section>
+      <section id="syntax">
+        <h2>Syntax</h2>
+        <p>
+          All the generation of <em>lorum ipsum</em> is targeted from data
+          attributes on the elements you want to fill with placeholder text.
+          The script looks for elements with <code>data-holder-ipsum-mode</code>
+          declared on them.
+        </p>
+        <p>
+          There are 5 modes of operation of <em>holder-ipsum</em> which are
+          controlled by the <code>data-holder-ipsum-mode</code>. These are:
+        </p>
+        <ul>
+          <li><a href="#mode-words">words</a></li>
+          <li><a href="#mode-sentence">sentence</a></li>
+          <li><a href="#mode-paragraph">paragraph</a></li>
+          <li><a href="#mode-paragraphs">paragraphs</a></li>
+          <li><a href="#mode-children">children</a></li>
+        </ul>
+        <p>
+          Each mode can take additional parameters in the form of data
+          attributes namespaced to that particular mode. For more detail see
+          the discussion of each mode.
+        </p>
+        <article class="row" id="mode-words">
+          <div class="span6">
+            <h3>words</h3>
+            <p>
+              Declaring <code>data-holder-ipsum-mode="words"</code> will fill
+              the specified element with words. This mode requires that you pass
+              the number of words to display using
+              <code>data-holder-ipsum-words-count</code>.
+            <div class="alert alert-warning">
+              <strong>Warning:</strong> you must specify an integer for
+              <code>data-holder-ipsum-words-count</code>. There is no exception
+              handling around this parameter.
+            </div>
+            <div class="alert alert-warning">
+              <strong>Warning:</strong> there is an upper limit to the number
+              of words you can generate (currently 182) due to the size of the
+              <em>lorem-ipsum</em> dictionary. For larger bodies of text use, e.g.
+              <a href="#mode-sentence">sentence</a> or
+              <a href="#mode-paragraph">paragraph</a>.
+            </div>
+            <p>
+              Additionally you can
+              choose whether to have the common words from <em>lorem-ipsum</em>
+              at the beginning of your words. This is controlled by the optional
+              attribute <code>data-holder-ipsum-words-common</code> which must
+              be either <code>true</code> or <code>false</code>. By default,
+              this is <code>false</code>.
+            </p>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">&lt;p
+  data-holder-ipsum-mode="words"
+  data-holder-ipsum-words-count="10"
+  data-holder-ipsum-words-common="false"
+&gt;&lt;!-- 10 words will appear here --&gt;&lt;/p&gt;</pre>
+          </div>
+        </article>
+        <article class="row" id="mode-sentence">
+          <div class="span6">
+            <h3>sentence</h3>
+            <p>
+              If you want a whole sentence of <em>lorem-ipsum</em>, use
+              <code>data-holder-ipsum-mode="sentence"</code>. In sentence mode,
+              no additional parameters are expected and anything else passed
+              will be ignored.
+            </p>
+            <div class="alert alert-info">
+              <strong>Hint:</strong> There is quite a bit of variability in the
+              length of the sentences generated due to the random nature of the
+              algorithm. For more predictable blocks of text, you may be better
+              off using <a href="#mode-words">words mode</a>.
+            </div>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">&lt;p
+  data-holder-ipsum-mode="sentence"
+&gt;&lt;!-- sentence will appear here --&gt;&lt;/p&gt;</pre>
+          </div>
+        </article>
+        <article class="row" id="mode-paragraph">
+          <div class="span6">
+            <h3>paragraph</h3>
+            <p>
+              To output a paragraph of <em>lorem-ipsum</em>, use
+              <code>data-holder-ipsum-mode="paragraph"</code>. In paragraph mode,
+              no additional parameters are expected and anything else passed
+              will be ignored.
+            </p>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">&lt;p
+  data-holder-ipsum-mode="paragraph"
+&gt;&lt;!-- paragraph will appear here --&gt;&lt;/p&gt;</pre>
+          </div>
+        </article>
+        <article class="row" id="mode-paragraphs">
+          <div class="span6">
+            <h3>paragraphs</h3>
+            <p>
+              For large blocks of text, <code>data-holder-ipsum-mode="paragraphs"</code>
+              will come in handy. This outputs the number of paragraphs you
+              specify with <code>data-holder-ipsum-paragraphs-count</code>.
+            </p>
+            <p>
+              Additionally, you can control whether the first paragraph begins
+              with the common <em>lorem ipsum</em> phrase with the 
+              <code>data-holder-ipsum-paragraphs-common</code> attribute.
+            </p>
+            <div class="alert alert-info">
+              <strong>Note:</strong> the paragraphs will be joined with two
+              <code>&lt;br&gt;</code> elements. For finer control of this
+              behaviour see the <a href="#mode-children">children mode</a>.
+            </div>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">&lt;p
+  data-holder-ipsum-mode="paragraphs"
+  data-holder-ipsum-paragraphs-count="4"
+  data-holder-ipsum-paragraphs-common="true"
+&gt;&lt;!-- 4 paragraphs will appear here, starting with the common phrase --&gt;&lt;/p&gt;</pre>
+          </div>
+        </article>
+        <article class="row" id="mode-children">
+          <div class="span6">
+            <h3>children</h3>
+            <p>
+              If you're experimenting with how a <code>&lt;ol&gt;</code> might
+              look and you want to vary the number of <code>&lt;li&gt;</code>
+              which are subordinate to it, use,
+              <code>data-holder-ipsum-mode="children"</code>.
+            </p>
+            <p>
+              This is the most powerful mode of <em>holder-ipsum.js</em> and its
+              parameters fall into two discrete categories:
+            </p>
+            <dl>
+              <dt>Those which control the beahviour of the generation of the children</dt>
+              <dd><code>data-holder-ipsum-children-count</code></dd>
+              <dd><code>data-holder-ipsum-children-element</code></dd>
+              <dd><code>data-holder-ipsum-children-mode</code></dd>
+              <dt>Those which control the mode of the children</dt>
+              <dd>
+                e.g. <code>data-holder-ipsum-children-words-count</code> if
+                <dd><code>data-holder-ipsum-children-mode="words"</code>
+              </dd>
+            </dl>
+            <p>
+              To control the number of children that will be generated set the
+              <code>data-holder-ipsum-children-count</code>. This must be an
+              integer. <strong>Default:</strong> <code>3</code>
+            </p>
+            <p>
+              To set the type of tag used to build the children, set
+              <code>data-holder-ipsum-children-element</code>, e.g.
+              <code>data-holder-ipsum-children-element="dd"</code>. NB This
+              should not contain the angular brackets &ndash; just the name of
+              the tag. <strong>Default:</strong> <code>p</code>
+            </p>
+            <p>
+              To specify which mode should be used to generate the children, set
+              <code>data-holder-ipsum-children-mode</code>. This can be any
+              value which is also valid for <code>data-holder-ipsum-mode</code>.
+            </p>
+            <p>
+              To pass arguments to the generator for the children, ensure that
+              the argument is namespaced, e.g.
+              <code>data-holder-ipsum-children-words-count</code>.
+            </p>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">&lt;ol
+  data-holder-ipsum-mode="children"
+  data-holder-ipsum-children-mode="words"
+  data-holder-ipsum-children-element="li"
+  data-holder-ipsum-children-count="10"
+  data-holder-ipsum-children-words-count="10"
+&gt;&lt;!-- 10 li elements will be appended here, each with 10 random words --&gt;&lt;/ol&gt;</pre>
+          </div>
+        </article>
+      </section>
+      <section id="api">
+        <h2>Public API</h2>
+        <p>
+          All the generator functions are exposed as a public API on the
+          global <code>HolderIpsum</code> object. The methods are:
+        </p>
+        <ul>
+          <li><a href="#api-words">words</a></li>
+          <li><a href="#api-sentence">sentence</a></li>
+          <li><a href="#api-paragraph">paragraph</a></li>
+          <li><a href="#api-paragraphs">paragraphs</a></li>
+        </ul>
+        <p>
+          You will recognize these from the <a href="#syntax">declarative form</a>
+          of use of <code>holder-ipsum.js</code>. However, there are some subtle
+          differences which are documented below.
+        </p>
+        <article class="row" id="api-words">
+          <div class="span6">
+            <h3>words</h3>
+            <p>
+              <strong>Usage</strong>:
+              <code>HolderIpsum.words(word_count, suppress_common)</code>
+            </p>
+            <dl>
+              <dt><code>word_count</code></dt>
+              <dd>The number of unique words to generate</dd>
+              <dt><code>suppress_common</code></dt>
+              <dd>
+                Whether to suppress the common phrase from <em>lorem-ipsum</em>.
+                This is an optional parameter defaulting to <code>false</code>.
+              </dd>
+            </dl>
+            <div class="alert alert-warning">
+              <strong>Warning:</strong> there is an upper limit to the number
+              of words you can generate (currently 182) due to the size of the
+              <em>lorem-ipsum</em> dictionary. For larger bodies of text use, e.g.
+              <a href="#api-sentence">sentence</a> or
+              <a href="#api-paragraph">paragraph</a>.
+            </div>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">
+// Generate 40 words of lorem-ipsum
+// with a random beginning
+var words = HolderIpsum.words(40, true);
+
+// Generate 35 words of lorem-ipsum
+// starting with the common phrase
+var ipsum_words = HolderIpsum.words(35, false);</pre>
+          </div>
+        </article>
+        <article class="row" id="api-sentence">
+          <div class="span6">
+            <h3>sentence</h3>
+            <p>
+              <strong>Usage</strong>:
+              <code>HolderIpsum.sentence()</code>
+            </p>
+            <p>There are no parameters for this function.</p>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">
+// Generate a sentence of lorem-ipsum
+var sentence = HolderIpsum.sentence();</pre>
+          </div>
+        </article>
+        <article class="row" id="api-paragraph">
+          <div class="span6">
+            <h3>paragraph</h3>
+            <p>
+              <strong>Usage</strong>:
+              <code>HolderIpsum.paragraph()</code>
+            </p>
+            <p>There are no parameters for this function.</p>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">
+// Generate a paragraph of lorem-ipsum
+var paragraph = HolderIpsum.paragraph();</pre>
+          </div>
+        </article>
+        <article class="row" id="api-paragraphs">
+          <div class="span6">
+            <h3>paragraphs</h3>
+            <p>
+              <strong>Usage</strong>:
+              <code>HolderIpsum.paragraphs(paragraph_count, suppress_common)</code>
+            </p>
+            <dl>
+              <dt><code>paragraph_count</code></dt>
+              <dd>The number of paragraphs to generate</dd>
+              <dt><code>suppress_common</code></dt>
+              <dd>
+                Whether to suppress the common phrase from <em>lorem-ipsum</em>.
+                This is an optional parameter defaulting to <code>false</code>.
+              </dd>
+            </dl>
+            <p>This function returns an array of strings.</p>
+          </div>
+          <div class="span6">
+            <h4>Example</h4>
+            <pre class="prettyprint linenums">
+// Generate 3 paragraphs of lorem-ipsum
+// starting with the random words
+var paragraphs = HolderIpsum.paragraphs(3, true);
+
+// Generate 4 paragraphs of lorem-ipsum
+// starting with the common phrase
+var paragraphs = HolderIpsum.paragraphs(4, false);</pre>
+          </div>
+        </article>
+      </section>
+      <section id="compatibility">
+        <h2>Compatibility</h2>
+        <p>
+          The code uses all native Javascript and should be supported by all
+          modern broswers. It has been tested in:
+        </p>
+        <ul>
+          <li>Chrome 21</li>
+          <li>Safari 5.0.6</li>
+          <li>Firefox 15.0</li>
+        </ul>
+        <p>
+          Additionally, <a href="http://caniuse.com/" target="_blank">caniuse</a>
+          would suggest support for MSIE version 9 and above.
+        </p>
+      </section>
+    </div>
+  
+    <script src="lib/prettify.js"></script>
+    <script>window.onload = prettyPrint();</script>
+  </body>
+</html>

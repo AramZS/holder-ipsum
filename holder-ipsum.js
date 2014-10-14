@@ -1,26 +1,45 @@
 var HolderIpsum = (function () {
     'use strict';
-    
+
     // DOM constants
-    
+
     var DATA_ATTRIBUTE_PREFIX = 'data-holder-ipsum-';
-    
+
     var DATA_ATTRIBUTE_PREFIX_LENGTH = DATA_ATTRIBUTE_PREFIX.length;
-    
+
+    //ie8 patchs
+    if (!('indexOf' in Array.prototype)) {
+        Array.prototype.indexOf= function(find, i /*opt*/) {
+            if (i===undefined) i= 0;
+            if (i<0) i+= this.length;
+            if (i<0) i= 0;
+            for (var n= this.length; i<n; i++)
+                if (i in this && this[i]===find)
+                    return i;
+            return -1;
+        };
+    }
+    if (!('forEach' in Array.prototype)) {
+        Array.prototype.forEach= function(action, that /*opt*/) {
+            for (var i= 0, n= this.length; i<n; i++)
+                if (i in this)
+                    action.call(that, this[i], i, this);
+        };
+    }
+
     // Shorthand
-    
     var iterate = Array.prototype.forEach;
-    
+
     // Data
-    
+
     var COMMON_PARAGRAPH = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
     var WORDS = 'exercitationem,perferendis,perspiciatis,laborum,eveniet,sunt,iure,nam,nobis,eum,cum,officiis,excepturi,odio,consectetur,quasi,aut,quisquam,vel,eligendi,itaque,non,odit,tempore,quaerat,dignissimos,facilis,neque,nihil,expedita,vitae,vero,ipsum,nisi,animi,cumque,pariatur,velit,modi,natus,iusto,eaque,sequi,illo,sed,ex,et,voluptatibus,tempora,veritatis,ratione,assumenda,incidunt,nostrum,placeat,aliquid,fuga,provident,praesentium,rem,necessitatibus,suscipit,adipisci,quidem,possimus,voluptas,debitis,sint,accusantium,unde,sapiente,voluptate,qui,aspernatur,laudantium,soluta,amet,quo,aliquam,saepe,culpa,libero,ipsa,dicta,reiciendis,nesciunt,doloribus,autem,impedit,minima,maiores,repudiandae,ipsam,obcaecati,ullam,enim,totam,delectus,ducimus,quis,voluptates,dolores,molestiae,harum,dolorem,quia,voluptatem,molestias,magni,distinctio,omnis,illum,dolorum,voluptatum,ea,quas,quam,corporis,quae,blanditiis,atque,deserunt,laboriosam,earum,consequuntur,hic,cupiditate,quibusdam,accusamus,ut,rerum,error,minus,eius,ab,ad,nemo,fugit,officia,at,in,id,quos,reprehenderit,numquam,iste,fugiat,sit,inventore,beatae,repellendus,magnam,recusandae,quod,explicabo,doloremque,aperiam,consequatur,asperiores,commodi,optio,dolor,labore,temporibus,repellat,veniam,architecto,est,esse,mollitia,nulla,a,similique,eos,alias,dolore,tenetur,deleniti,porro,facere,maxime,corrupti'.split(',');
 
     var COMMON_WORDS = 'lorem,ipsum,dolor,sit,amet,consectetur,adipisicing,elit,sed,do,eiusmod,tempor,incididunt,ut,labore,et,dolore,magna,aliqua'.split(',');
-    
+
     // Main lorem-ipsum functionality
-    
+
     /**
      * Generate a sentence of varying length with a varying number of
      * sub-clauses of lorem-ipsum text.
@@ -39,7 +58,7 @@ var HolderIpsum = (function () {
         var sentence_end = '.?'.substr(get_random_integer(0, 1), 1);
         return sentence.substr(0, 1).toUpperCase() + sentence.substr(1) + sentence_end;
     };
-    
+
 
     /**
      * Generate a paragraph consisting of between 1 and 4 sentences, inclusive.
@@ -51,13 +70,13 @@ var HolderIpsum = (function () {
         }
         return sentences.join(' ');
     };
-    
+
     /**
      * Generate an array of paragraphs.
-     * 
-     * If `suppress_common` is false, then the first paragraph will be the 
+     *
+     * If `suppress_common` is false, then the first paragraph will be the
      * standard 'lorem-ipsum' paragraph.
-     * 
+     *
      */
     var generate_paragraphs = function (paragraph_count, suppress_common) {
         var paragraphs = [];
@@ -70,10 +89,10 @@ var HolderIpsum = (function () {
         }
         return paragraphs;
     };
-    
+
     /**
      * Generate ``word_count`` lorem ipsum words separated by a single space.
-     * 
+     *
      * If ``suppress_common`` is false the first 19 words will be the standard
      * 'lorem-ipsum' words. Otherwise, all words will be selected randomly.
      */
@@ -93,16 +112,16 @@ var HolderIpsum = (function () {
         } else {
             words = words.slice(0, word_count);
         }
-        
+
         return words.join(' ');
     };
-    
+
     // Utilities
-    
+
     var get_random_integer = function (min, max) {
-        return Math.round((Math.random() * (max - min)) + min); 
+        return Math.round((Math.random() * (max - min)) + min);
     };
-    
+
     var select_sample_from_population = function (population, sample_size) {
         var population_size = population.length;
         if (population_size <= sample_size) {
@@ -110,7 +129,7 @@ var HolderIpsum = (function () {
         } else if (sample_size <= 0) {
             throw new Error('Must have a smaple size of at least 1');
         }
-        
+
         var get_population_index = function () {
             return get_random_integer(0, population_size - 1);
         };
@@ -126,33 +145,33 @@ var HolderIpsum = (function () {
         }
         return sampled_elements;
     };
-    
+
     var starts_with = function (string, sub_string) {
         return string.substr(0, sub_string.length) === sub_string;
     };
-    
+
     // DOM Maniuplation
-    
+
     var lorem_ipsumify_elements = function (elements) {
-        Array.prototype.forEach.call(elements, function (element) {
+        iterate.call(elements, function (element) {
             var settings = convert_data_attributes_to_settings(element);
             lorem_ipsumify_element(element, settings);
         });
     };
-    
+
     var lorem_ipsumify_element = function (element, settings) {
         switch (settings.mode) {
             case 'words':
-                element.textContent = generate_words(
+                element.innerHTML = generate_words(
                     settings.words.count,
                     !settings.words.common
                 );
                 break;
             case 'sentence':
-                element.textContent = generate_sentence();
+                element.innerHTML = generate_sentence();
                 break;
             case 'paragraph':
-                element.textContent = generate_paragraph();
+                element.innerHTML = generate_paragraph();
                 break;
             case 'paragraphs':
                 var paragraphs = generate_paragraphs(
@@ -178,7 +197,7 @@ var HolderIpsum = (function () {
                 // TODO: Do we want to throw an error here or pass silently
         }
     };
-    
+
     var convert_data_attributes_to_settings = function (element) {
         var settings = {};
         iterate.call(element.attributes, function (attribute) {
@@ -188,7 +207,7 @@ var HolderIpsum = (function () {
                 try {
                     setting_value = JSON.parse(setting_value);
                 } catch (error) {}
-                
+
                 var unprefixed_attribute_name = attribute.name.substr(
                     DATA_ATTRIBUTE_PREFIX_LENGTH
                 );
@@ -211,21 +230,33 @@ var HolderIpsum = (function () {
         });
         return settings;
     };
-    
-    window.addEventListener('DOMContentLoaded', function () {
-        var elements = document.querySelectorAll(
-            '[' + DATA_ATTRIBUTE_PREFIX + 'mode]'
-        );
-        lorem_ipsumify_elements(elements);
-    });
-    
+
+    if(window.addEventListener){
+        window.addEventListener('DOMContentLoaded', function () {
+            var elements = document.querySelectorAll(
+                '[' + DATA_ATTRIBUTE_PREFIX + 'mode]'
+            );
+            lorem_ipsumify_elements(elements);
+        });
+    }
+    else if(window.attachEvent){
+        document.onreadystatechange=function(){
+            if (document.readyState == "complete") {
+                var elements = document.querySelectorAll(
+                    '[' + DATA_ATTRIBUTE_PREFIX + 'mode]'
+                );
+                lorem_ipsumify_elements(elements);
+            }
+        };
+    }
+
     // Public API
-    
+
     return {
         paragraph: generate_paragraph,
         paragraphs: generate_paragraphs,
         sentence: generate_sentence,
         words: generate_words
     };
-    
+
 })();

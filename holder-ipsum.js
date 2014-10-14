@@ -7,23 +7,33 @@ var HolderIpsum = (function () {
 
     var DATA_ATTRIBUTE_PREFIX_LENGTH = DATA_ATTRIBUTE_PREFIX.length;
 
-    //ie8 patchs
+    //IE8 patches
     if (!('indexOf' in Array.prototype)) {
-        Array.prototype.indexOf= function(find, i /*opt*/) {
-            if (i===undefined) i= 0;
-            if (i<0) i+= this.length;
-            if (i<0) i= 0;
-            for (var n= this.length; i<n; i++)
-                if (i in this && this[i]===find)
+        Array.prototype.indexOf = function(find, i /*opt*/) {
+            if (i===undefined) {
+                i = 0;
+            }
+            if (i<0) {
+                i+= this.length;
+            }
+            if (i<0) {
+                i = 0;
+            }
+            for (var n=this.length; i<n; i++) {
+                if (i in this && this[i] === find) {
                     return i;
+                }
+            }
             return -1;
         };
     }
     if (!('forEach' in Array.prototype)) {
-        Array.prototype.forEach= function(action, that /*opt*/) {
-            for (var i= 0, n= this.length; i<n; i++)
-                if (i in this)
+        Array.prototype.forEach = function(action, that /*opt*/) {
+            for (var i=0, n=this.length; i<n; i++) {
+                if (i in this) {
                     action.call(that, this[i], i, this);
+                }
+            }
         };
     }
 
@@ -150,6 +160,14 @@ var HolderIpsum = (function () {
         return string.substr(0, sub_string.length) === sub_string;
     };
 
+    var set_text = function (node, text) {
+        try {
+            node.textContent = text;
+        } catch (e) {
+            node.innerText = text;
+        }
+    };
+
     // DOM Maniuplation
 
     var lorem_ipsumify_elements = function (elements) {
@@ -162,16 +180,16 @@ var HolderIpsum = (function () {
     var lorem_ipsumify_element = function (element, settings) {
         switch (settings.mode) {
             case 'words':
-                element.innerHTML = generate_words(
+                set_text(element, generate_words(
                     settings.words.count,
                     !settings.words.common
-                );
+                ));
                 break;
             case 'sentence':
-                element.innerHTML = generate_sentence();
+                set_text(element, generate_sentence());
                 break;
             case 'paragraph':
-                element.innerHTML = generate_paragraph();
+                set_text(element, generate_paragraph());
                 break;
             case 'paragraphs':
                 var paragraphs = generate_paragraphs(
@@ -231,21 +249,20 @@ var HolderIpsum = (function () {
         return settings;
     };
 
-    if(window.addEventListener){
-        window.addEventListener('DOMContentLoaded', function () {
-            var elements = document.querySelectorAll(
-                '[' + DATA_ATTRIBUTE_PREFIX + 'mode]'
-            );
-            lorem_ipsumify_elements(elements);
-        });
-    }
-    else if(window.attachEvent){
-        document.onreadystatechange=function(){
-            if (document.readyState == "complete") {
-                var elements = document.querySelectorAll(
-                    '[' + DATA_ATTRIBUTE_PREFIX + 'mode]'
-                );
-                lorem_ipsumify_elements(elements);
+    
+    var run = function () {
+        var elements = document.querySelectorAll(
+            '[' + DATA_ATTRIBUTE_PREFIX + 'mode]'
+        );
+        lorem_ipsumify_elements(elements);
+    };
+
+    if (window.addEventListener) {
+        window.addEventListener('DOMContentLoaded', run);
+    } else if (window.attachEvent) {
+        document.onreadystatechange = function () {
+            if (document.readyState === 'complete') {
+                run();
             }
         };
     }

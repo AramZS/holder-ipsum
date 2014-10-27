@@ -161,9 +161,10 @@ var HolderIpsum = (function () {
     };
 
     var set_text = function (node, text) {
-        try {
+        if (node.textContent !== undefined){
             node.textContent = text;
-        } catch (e) {
+        }
+        else{
             node.innerText = text;
         }
     };
